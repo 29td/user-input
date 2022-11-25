@@ -1,20 +1,10 @@
 import React from "react";
-import { TwitterTweetEmbed } from "react-twitter-embed";
 
-const Tweet = ({ json }) => {
-  const { id } = json.data;
-
-  const options = {
-    cards: "hidden",
-    align: "center",
-    width: "550",
-    conversation: "none"
-  };
-
+const Tweet = () => {
+  
   return (
     <>
-    <TwitterTweetEmbed options={options} tweetId={id} />
-    <h6>{json}</h6>
+    <h6>Latest Tweets</h6>
     </>
   );
 };

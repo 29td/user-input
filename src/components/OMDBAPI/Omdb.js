@@ -58,7 +58,13 @@ const Omdb = () => {
                     <img src={movie.Poster} className="card-img-top" alt="..."></img>
                     <div className="card-body">
                     <h3 className="card-title">{movie.Title}</h3>
-                    <p className="card-text">{movie.Year}</p>
+                    <ul class = "movie-misc-info">
+                     <li class = "year">Year: {movie.Year}</li>
+                     <li class = "ratings">Ratings: {movie.imdRating}</li>
+                     <li class = "released">Released: {movie.Released}</li>
+					 <li class = "Language">Language: {movie.Language}</li>
+                </ul>
+
                     </div>
                     </div>
 		            </div>
@@ -73,65 +79,3 @@ const Omdb = () => {
 }
 
 export default Omdb;
-
-// const Omdb = () => {
-//     const [movies, setMovies] = useState([]);
-
-// 	// const fetchMovies = () => {
-		// axios.get('https://www.omdbapi.com/?i=tt3896198&apikey=2ea873e7')
-// 	// 	.then((response)=>{
-// 	// 		console.log(response)
-// 	// 		setMovies(response.data.Search)
-// 	// 	})
-// 	// }
-
-// 	const getMovieRequest = async (searchTerm) => {
-// 		const url = `https://omdbapi.com/?s=${searchTerm}&page=1&apikey=263d22d8`;
-// 		const response = await fetch(`${url}`);
-// 		const responseJson = await response.json();
-
-// 		if (responseJson.Search) {
-// 			setMovies(responseJson.Search);
-// 		}
-// 	};
-
-// 	useEffect(() => {
-// 		getMovieRequest();
-// 	}, []);
-
-// 	return (
-// 		<>
-// 		<button onClick={getMovieRequest}>Fetch Movies</button>
-// 		{
-// 			movies.map((movie,index)=>{
-// 				return (
-// 					<div classNameName='image-container d-flex justify-content-start m-3'>
-// 					<img src={movie.Poster} alt='movie'></img>
-//                     <div className = "movie-info">
-// 					<h3 className = "movie-title" key={index}>{movie.Title}</h3>
-// 					<ul className = "movie-misc-info">
-//                     <li className = "year" key={index}>Year: {movie.Year}</li>
-//                     <li className = "rated" key={index}>Ratings: {movie.Rated}</li>
-//                     <li className = "released" key={index}>Released: {movie.Released}</li>
-//                 </ul>
-//                 <p className = "genre" key={index}><b>Genre:</b> {movie.Genre}</p>
-//                 <p className = "writer" key={index}><b>Writer:</b> {movie.Writer}</p>
-//                 <p className = "actors" key={index}><b>Actors: </b>{movie.Actors}</p>
-//                 <p className = "plot" key={index}><b>Plot:</b> {movie.Plot}</p>
-//                 <p className = "language" key={index}><b>Language:</b> {movie.Language}</p>
-//                 <p className = "awards" key={index}><b><i className = "fas fa-award"></i></b> {movie.Awards}</p>
-//             </div>
-//             </div>
-// 				);
-// 			})
-// 		}
-// 		</>
-// 		// <div classNameName='container-fluid movie-app'>
-// 		// 	<div classNameName='row'>
-// 		// 		<MovieList movies={movies} />
-// 		// 	</div>
-// 		// </div>
-// 	);
-// };
-  
-//   export default Omdb;
