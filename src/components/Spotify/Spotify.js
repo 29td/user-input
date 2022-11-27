@@ -32,6 +32,7 @@ function Spotify() {
     }
     console.log(accessToken);
   }, [accessToken]);
+  // https://api.twitter.com/2/users/by/username/${searchInput}
 
   // Search
   async function Search() {
