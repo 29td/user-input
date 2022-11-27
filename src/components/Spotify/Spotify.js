@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
 import { useState, useEffect } from "react";
+import { Buffer } from 'buffer';
 
 const CLIENT_ID = "5d9dfb5278644d07a2c20773b1490fd0";
 const CLIENT_SECRET = "1f7b7f725f6c4a65a1a3c1eb3d598ad6";
@@ -13,46 +14,36 @@ function Spotify() {
 
   useEffect(() => {
     // access token
-    var authParameters = {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic' +  CLIENT_ID + CLIENT_SECRET,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials'
+    const getAccessToken = async () => {
+      const response = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Basic " + new Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
+        },
+        body: "grant_type=client_credentials"
+      });
+      const data = await response.json();
+      setAccessToken(data.access_token);
+    };
+
+    if (!accessToken) {
+      getAccessToken();
     }
-    fetch('https://accounts.spotify.com/api/token', authParameters)
-    .then(result => result.json())
-    .then(data => setAccessToken(data.access_token))
-  }, [])
+    console.log(accessToken);
+  }, [accessToken]);
 
   // Search
   async function Search() {
-    console.log("Search for " + searchInput);
-
-    // get request using search to get artist id
-    var searchParameters = {
-      method: 'GET',
+    // search for artist and display albums
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=album`, {
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
-      }
-    }
-
-    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', searchParameters)
-    .then(response => response.json())
-    .then(data => { return data.artists.items[0].id })
-
-    console.log('Artist ID is ' + artistID);
-    // get request with artist id in order to grab all albums from artist
-
-    var returnedAlbums = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50')
-    .then(response =>response.json())
-    .then(data => {
-      console.log(data);
-      setAlbums(data.items);
+        Authorization: "Bearer " + accessToken,
+      },
     });
-    // display those albums to the user
+    const data = await response.json();
+    setAlbums(data.albums.items);
   }
 // console.log(albums)
   return (
