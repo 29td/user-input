@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { Buffer } from 'buffer';
+import _ from 'lodash';
+// import music from './assets/images/music.png'
 
 const CLIENT_ID = "5d9dfb5278644d07a2c20773b1490fd0";
 const CLIENT_SECRET = "1f7b7f725f6c4a65a1a3c1eb3d598ad6";
@@ -72,9 +74,19 @@ function Spotify() {
             console.log(album)
             return (
               <Card key={i}>
-              <Card.Img src={album.images[0].url} />
+              <Card.Img variant="top"
+                    src={album.images[0].url} alt="" 
+                    />
                 <Card.Body>
                   <Card.Title>{album.name}</Card.Title>
+                  <a 
+              target = "_blank"
+              href={album.external_urls.spotify}
+              rel="noopener noreference"
+              className="card-image-link"
+              >
+              Link
+              </a>
                 </Card.Body>
             </Card>
     

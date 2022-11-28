@@ -1,91 +1,80 @@
-import React from 'react';
+// import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
-import { useState, useEffect } from "react";
-import { Buffer } from 'buffer';
 
-const TWITTER_API_KEY = "3BIvglMa3QdoQYTf88aePx6M8";
-const TWITTER_API_SECRET = "Qu2painFz8DtlL7ou9FQvr98XFwqh9JPhHd9nsyTbwSv1D7NpR";
-const TWITTER_BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAAIEVjwEAAAAAwk1Gj%2FzlTgDFJGFqzbzknyH3TbA%3DR4c8DVqtxhGUwakpYmtUscfUoYUEIHEW3CVcgtOfCSDHKnEozr";
+
+const BEARER_TOKEN="AAAAAAAAAAAAAAAAAAAAAIEVjwEAAAAAwk1Gj%2FzlTgDFJGFqzbzknyH3TbA%3DR4c8DVqtxhGUwakpYmtUscfUoYUEIHEW3CVcgtOfCSDHKnEozr";
 
 
 function Tweets() {
-  // const [searchInput, setSearchInput] = useState('');
-  const [accessToken, setAccessToken] = useState('');
-  const [tweets, setTweets] = useState([]);
-
-  useEffect(() => {
-    // access token
-    const getAccessToken = async () => {
-      const response = await fetch("https://api.twitter.com/oauth2/token", {
-        mode: 'no-cors',
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: "Basic " + "Basic " + new Buffer.from(TWITTER_API_KEY  + ":" + TWITTER_API_SECRET).toString("base64"),
-        },
-        body: "grant_type=client_credentials"
-      });
-      const data = await response.json();
-      setAccessToken(data.access_token);
-    };
-
-    if (!accessToken) {
-      getAccessToken();
-    }
-    console.log(accessToken);
-  }, [accessToken]);
+//   const [searchInput, setSearchInput] = useState('');
+//   const [tweets, setTweets] = useState([]);
 
   // Search
   async function Search() {
     // search for artist and display tweets
-    const response = await fetch(`https://api.twitter.com/2/tweets/search/recent?query=from:twitterdev`, {
+    const params = {
+        'query': 'from:elonmusk',
+        'granularity': 'day'
+    }
+    const response = await fetch(`https://api.twitter.com/2/tweets/counts/recent`, params, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + TWITTER_BEARER_TOKEN,
+        mode: "no-cors",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
     const data = await response.json();
-    setTweets(data.tweets.user);
+    console.log(data.text);
   }
 // console.log(tweets)
   return (
-    <div className="App">
-      <Container>
-        <InputGroup className="rb-3" size="lg">
-          {/* <FormControl 
-          placeholder="Search For Tweets"
-          type="input"
-          onKeyPress={event => {
-            if (event.key == "Enter") {
-              Search();
-            }
-          }} 
-          onChange={event => setSearchInput(event.target.value)}
-          /> */}
-          {/* <Button onClick={Search}>
-            Tweets
-          </Button> */}
-        </InputGroup>
-      </Container>
-      <Container>
-        <Row className="mx-2 row row-cols-4">
-          {tweets.map( (tweet, i) => {
-            console.log(tweet)
-            return (
-              <Card key={i}>
-              <Card.Img src={tweet.images[0].url} />
-                <Card.Body>
-                  <Card.Title>{tweet.name}</Card.Title>
-                </Card.Body>
-            </Card>
+      Search()
+//     <div className="App">
+//       <Container>
+//         <InputGroup className="rb-3" size="lg">
+//           <FormControl 
+//           placeholder="Search recent tweets"
+//           type="input"
+//           onKeyPress={event => {
+//             if (event.key == "Enter") {
+//               Search();
+//             }
+//           }} 
+//           onChange={event => setSearchInput(event.target.value)}
+//           />
+//           <Button onClick={Search}>
+//             Search Tweets
+//           </Button>
+//         </InputGroup>
+//       </Container>
+//       <Container>
+//         <Row className="mx-2 row row-cols-4">
+//           {tweets.map( (album, i) => {
+//             console.log(album)
+//             return (
+//               <Card key={i}>
+//               <a 
+//               target = "_blank"
+//               href={album.external_urls.spotify}
+//               rel="noopener noreference"
+//               className="card-image-link"
+//               >
+//               <Card.Link>{album.link}</Card.Link>
+//               </a>
+//               <Card.Img variant="top"
+//                     src={album.images[0].url} alt="" 
+//                     />
+//                 <Card.Body>
+//                   <Card.Title>{album.name}</Card.Title>
+//                 </Card.Body>
+//             </Card>
     
-            )
-          })}
+//             )
+//           })}
 
-        </Row>
-      </Container>
-    </div>
+//         </Row>
+//       </Container>
+//     </div>
   );
 }
 
@@ -103,187 +92,90 @@ export default Tweets;
 
 
 
-// // const needle = require('needle');
-// import axios from 'axios';
-// const token = process.env.BEARER_TOKEN;
 
-// const endpointUrl = "https://api.twitter.com/2/tweets/counts/recent";
+
+
+
+
+
+
+// import { Client } from "twitter-api-sdk";
+
 
 // function Tweets() {
-//   var Twitter = require('twitter');
+//     async function main() {
 
-// var client = new Twitter({
-//   consumer_key: process.env.TWITTER_CONSUMER_KEY,
-//   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-//   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-//   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-// });
-//   client.get('search/tweets', {q: 'node.js'}, function(error, tweets, response) {
-//     console.log(tweets);
-//  });
-//   async function getRequest() {
-
-//     // Edit query parameters below and specify a search query
-//     // optional params: start_time,end_time,since_id,until_id,next_token,granularity
-//     const params = {
-//         'query': 'from:twitterdev',
-//         'granularity': 'day'
-//     }
-  
-//     (async () => {
-//       // search for artist and display tweets
-//       const response = await fetch(`https://api.twitter.com/2/users/by/username/${searchInput}`, params, {
-//         method: "GET",
-//         headers: {
-//           "User-Agent": "v2RecentTweetCountsJS",
-//           "authorization": `Bearer ${token}`
-//         },
-//       });
-//       const data = await response.json();
-//       setTweets(data.user);
-//     })
-
-//     if (response.body) {
-//       return response.body;
-//   } else {
-//       throw new Error('Unsuccessful request');
-//   }
+//         const client = new Client(process.env.BEARER_TOKEN);
+//         const user = 44196397 
+      
+//         const response = await client.tweets.usersIdTweets(`${user}`, {
+      
+//           "max_results": 20
+      
+//         });
+      
+        
+      
+//         console.log("response", JSON.stringify(response, null, 2));
+      
+//       }
+//     return (
+//         main()
+//     );
+      
 // }
 
-// (async () => {
-
-//   try {
-//       // Make request
-//       const response = await getRequest();
-//       console.dir(response, {
-//           depth: null
-//       });
-
-//   } catch (e) {
-//       console.log(e);
-//       process.exit(-1);
-//   }
-//   process.exit();
-// })();
+// export default Tweets();
 
 
+// // import needle from 'needle';
 
-//   //   const res = await fetch('get', endpointUrl, params, {
-//   //       headers: {
-//   //           "User-Agent": "v2RecentTweetCountsJS",
-//   //           "authorization": `Bearer ${token}`
-//   //       }
-//   //   })
-  
-//   //   if (res.body) {
-//   //       return res.body;
-//   //   } else {
-//   //       throw new Error('Unsuccessful request');
-//   //   }
-//   // }
-  
-//   // (async () => {
-  
-//   //   try {
-//   //       // Make request
-//   //       const response = await getRequest();
-//   //       console.dir(response, {
-//   //           depth: null
-//   //       });
-  
-//   //   } catch (e) {
-//   //       console.log(e);
-//   //       process.exit(-1);
-//   //   }
-//   //   process.exit();
-//   // })();
-  
-// }
+// // // The code below sets the bearer token from your environment variables
+// // // To set environment variables on macOS or Linux, run the export command below from the terminal:
+// // // export BEARER_TOKEN='YOUR-TOKEN'
+// // const token = "AAAAAAAAAAAAAAAAAAAAAIEVjwEAAAAAwk1Gj%2FzlTgDFJGFqzbzknyH3TbA%3DR4c8DVqtxhGUwakpYmtUscfUoYUEIHEW3CVcgtOfCSDHKnEozr";
 
-// export default Tweets;
+// // const endpointUrl = "https://api.twitter.com/2/tweets/counts/recent";
 
+// // async function getRequest() {
 
+// //     // Edit query parameters below and specify a search query
+// //     // optional params: start_time,end_time,since_id,until_id,next_token,granularity
+    // const params = {
+    //     'query': 'from:twitterdev',
+    //     'granularity': 'day'
+    // }
 
-// // import React from "react";
+// //     const res = await needle('get', endpointUrl, params, {
+// //         headers: {
+// //             "User-Agent": "v2RecentTweetCountsJS",
+// //             "authorization": `Bearer ${token}`
+// //         }
+// //     })
 
-// // require('dotenv').config();
-// // import TwitterClient from "twitter-api-client";
-// // import axios from "axios";
-
-// // const Tweet = () => {
-
-// //   const twitterClient = new TwitterClient ({
-// //     apiKey: process.env.TWITTER_API_KEY,
-// //     apiSecret: process.env.TWITTER_API_SECRET,
-// //     accessToken: process.env.TWITTER_ACCESS_TOKEN,
-// //     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-// // })
-// // axios.get('http://history.muffinlabs.com/date')
-// //     .then(response => {
-// //     const data = response.data.data ? response.data.data : {}
-// //     let tweet
-// //     if (data.Events && data.Events.length) {
-// //         //tweet the first event in the array
-// //         tweet = 'Year ' + data.Events[0].year + ' - ' + data.Events[0].text
+// //     if (res.body) {
+// //         return res.body;
 // //     } else {
-// //         tweet = 'Nothing happened today :)'
+// //         throw new Error('Unsuccessful request');
 // //     }
+// // }
 
-// //     //TODO send the tweet
-// // }).catch (err => {
-// //     console.error(err)
-// // })
-// //   // const [searchInput, setSearchInput] = useState('');
-// //   // const [accessToken, setAccessToken] = useState('');
-// //   // const [tweets, setTweets] = useState([]);
-// //   // Search
-// //   // async function Search() {
-// //     // search for artist and display tweets
-// //   //   const response = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=tweet`, {
-// //   //     method: "GET",
-// //   //     headers: {
-// //   //       Authorization: "Bearer " + accessToken,
-// //   //     },
-// //   //   });
-// //   //   const data = await response.json();
-// //   //   settweets(data.tweets.items);
-// //   // }
-  
-// // };
+// // (async () => {
 
-// // export default Tweet;
+// //     try {
+// //         // Make request
+// //         const response = await getRequest();
+// //         console.dir(response, {
+// //             depth: null
+// //         });
+
+// //     } catch (e) {
+// //         console.log(e);
+// //         process.exit(-1);
+// //     }
+// //     process.exit();
+// // })();
 
 
-// // // console.log('SA')
 
-// //   // const response = await fetch(`https://api.twitter.com/2/users/by/username/#{@Jito765079951}`)
-// //   // console.log(response)
-// //   // const twitterClient = new TwitterClient({
 
-// //   //     apiKey: process.env.TWITTER_API_KEY,
-// //   //     apiSecret: process.env.TWITTER_API_SECRET,
-// //   //     accessToken: process.env.TWITTER_ACCESS_TOKEN,
-// //   //     accessTokenSecret: process.env.TWITTER_BEARER_TOKEN
-// //   // })
-  
-// //   // axios.get('http://history.muffinlabs.com/date')
-// //   //     .then(response => {
-// //   //     const data = response.data.data ? response.data.data : {}
-// //   //     let tweet
-// //   //     if (data.Events && data.Events.length) {
-// //   //         //tweet the first event in the array
-// //   //         tweet = 'Year ' + data.Events[0].year + ' - ' + data.Events[0].text
-// //   //     } else {
-// //   //         tweet = 'Nothing happened today :)'
-// //   //     }
-  
-// //   //     twitterClient.tweets.statusesUpdate({
-// //   //         status: tweet
-// //   //     }).then (response => {
-// //   //         console.log("Tweeted!", response)
-// //   //     }).catch(err => {
-// //   //         console.error(err)
-// //   //     })
-// //   // }).catch (err => {
-// //   //     console.error(err)
-// //   // })

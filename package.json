@@ -17,7 +17,9 @@
     "express": "^4.18.2",
     "http": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.6",
+    "lodash": "^4.17.21",
     "needle": "^3.2.0",
+    "node-fetch": "^3.3.0",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
@@ -33,13 +35,15 @@
     "socket.io-client": "^4.5.4",
     "twitter": "^1.7.1",
     "twitter-api-client": "^1.6.1",
+    "twitter-api-sdk": "^1.2.1",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "browser": {
     "fs": false,
     "path": false,
-    "os": false
+    "os": false,
+    "crypto": false
   },
   "scripts": {
     "start": "react-scripts start",
@@ -70,6 +74,7 @@
     ]
   },
   "devDependencies": {
+    "@types/needle": "^2.5.3",
     "@types/node": "^18.11.9"
   }
 }
