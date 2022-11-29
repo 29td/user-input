@@ -60,7 +60,7 @@ const Omdb = () => {
                     <h3 className="card-title">{movie.Title}</h3>
                     <ul class = "movie-misc-info">
                      <li class = "year">Year: {movie.Year}</li>
-                     <li class = "ratings">Ratings: {movie.imdRating}</li>
+                     <li class = "ratings">Ratings: {movie.Rated}</li>
                      <li class = "released">Released: {movie.Released}</li>
 					 <li class = "Language">Language: {movie.Language}</li>
                 </ul>

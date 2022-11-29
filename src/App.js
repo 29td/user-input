@@ -11,9 +11,9 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Omdb />} />
+        <Route path="/" element={<Tweets />} />
         <Route path="/Spotify" element={<Spotify />} />
-        <Route path="/Tweets" element={<Tweets />} />
+        <Route path="/Omdb" element={<Omdb />} />
       </Routes>
     </>
   );

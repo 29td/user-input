@@ -3,17 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { Buffer } from 'buffer';
-import _ from 'lodash';
-// import music from './assets/images/music.png'
-
+import ReactAudioPlayer from 'react-audio-player';
+ 
 const CLIENT_ID = "5d9dfb5278644d07a2c20773b1490fd0";
 const CLIENT_SECRET = "1f7b7f725f6c4a65a1a3c1eb3d598ad6";
-
+ 
 function Spotify() {
   const [searchInput, setSearchInput] = useState('');
   const [accessToken, setAccessToken] = useState('');
-  const [albums, setAlbums] = useState([]);
-
+  const [tracks, setAlbums] = useState([]);
+ 
   useEffect(() => {
     // access token
     const getAccessToken = async () => {
@@ -28,39 +27,37 @@ function Spotify() {
       const data = await response.json();
       setAccessToken(data.access_token);
     };
-
+ 
     if (!accessToken) {
       getAccessToken();
     }
-    console.log(accessToken);
   }, [accessToken]);
-  // https://api.twitter.com/2/users/by/username/${searchInput}
-
-  // Search
+ 
   async function Search() {
     // search for artist and display albums
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=album`, {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=track`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + accessToken,
       },
     });
     const data = await response.json();
-    setAlbums(data.albums.items);
+    console.log(data.tracks.items)
+    setAlbums(data.tracks.items);
   }
-// console.log(albums)
+ 
   return (
     <div className="App">
       <Container>
         <InputGroup className="rb-3" size="lg">
-          <FormControl 
-          placeholder="Search For Artist"
+          <FormControl
+          placeholder="Search For Song"
           type="input"
           onKeyPress={event => {
-            if (event.key == "Enter") {
+            if (event.key === "Enter") {
               Search();
             }
-          }} 
+          }}
           onChange={event => setSearchInput(event.target.value)}
           />
           <Button onClick={Search}>
@@ -69,35 +66,27 @@ function Spotify() {
         </InputGroup>
       </Container>
       <Container>
+        {!tracks.length && <p>No songs found please try another name</p>}
         <Row className="mx-2 row row-cols-4">
-          {albums.map( (album, i) => {
-            console.log(album)
+          {tracks.map( (track, i) => {
             return (
               <Card key={i}>
-              <Card.Img variant="top"
-                    src={album.images[0].url} alt="" 
-                    />
+                <Card.Img src={track.album.images[0].url} />
                 <Card.Body>
-                  <Card.Title>{album.name}</Card.Title>
-                  <a 
-              target = "_blank"
-              href={album.external_urls.spotify}
-              rel="noopener noreference"
-              className="card-image-link"
-              >
-              Link
-              </a>
+                  <Card.Title>Name: {track.album.name}</Card.Title>
+                  <Card.Text>Artist: {track.artists[0].name}</Card.Text>
+                  <Card.Text>Album: {track.name}</Card.Text>
                 </Card.Body>
-            </Card>
-    
-            )
+                <ReactAudioPlayer src={track.preview_url} controls />
+              </Card>
+            );
           })}
-
         </Row>
       </Container>
     </div>
   );
 }
-
-
+ 
+ 
 export default Spotify;
+ 
